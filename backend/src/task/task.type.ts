@@ -6,6 +6,11 @@ export interface Task {
   listId: number;
 }
 
+export interface TaskList {
+  id: number;
+  tasks: Task[];
+}
+
 export enum TaskStatus {
   Todo = 'todo',
   Done = 'done',
@@ -13,6 +18,7 @@ export enum TaskStatus {
 
 export interface AddTaskDto {
   name: string;
+  listId: number;
 }
 
 export interface UpdateTaskDto {

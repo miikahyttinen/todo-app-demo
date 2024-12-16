@@ -27,17 +27,60 @@ export class TaskService {
     },
   ];
 
+  private nextId = this.tasks.length + 1;
+
   getTasks(): Task[] {
     return this.tasks;
   }
 
-  addTask(task: AddTaskDto): void {
-    console.log('addTask called');
-    // TODO: add implementation, if you chose to implement the backend functionality
+  createTask(addTaskDto: AddTaskDto): Task {
+    const newTask: Task = {
+      id: this.nextId++,
+      name: addTaskDto.name,
+      status: TaskStatus.Todo,
+      createdAt: new Date().toISOString(),
+      listId: addTaskDto.listId,
+    };
+
+    // IRL this would be a database insert
+    this.tasks.push(newTask);
+
+    return newTask;
   }
 
-  updateTask(id: number, task: UpdateTaskDto): void {
-    console.log('updateTask called');
-    // TODO: add implementation, if you chose to implement the backend functionality
+  getTaskList(taskListId: number): Task[] {
+    // IRL this would be a database query
+    const taskList = this.tasks.filter((task) => task.listId === taskListId);
+
+    if (!taskList) {
+      throw new Error(`Task list not found with id ${taskListId}`);
+    }
+
+    return taskList;
+  }
+
+  getTask(taskId: number): Task {
+    const task = this.tasks.find((task) => task.id === taskId);
+
+    if (!task) {
+      throw new Error(`Task not found with id ${taskId}`);
+    }
+
+    return task;
+  }
+
+  updateTask(taskId: number, updateTaskDto: UpdateTaskDto): Task {
+    const task = this.tasks.find((task) => task.id === taskId);
+    if (!task) {
+      throw new Error('Task not found');
+    }
+    const updatedTask = { ...task, status: updateTaskDto.status };
+
+    // IRL this would be a database update
+    this.tasks = this.tasks.map((task) =>
+      task.id === taskId ? updatedTask : task,
+    );
+
+    return updatedTask;
   }
 }

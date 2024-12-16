@@ -43,4 +43,17 @@ describe('TaskController', () => {
       expect(taskController.getTasks()).toEqual(defaultTasks);
     });
   });
+
+  describe('addTask', () => {
+    it('should add a task', () => {
+      taskController.addTask({
+        name: 'Buy groceries',
+        listId: 3,
+      });
+      const newTask = taskController.getTask('4');
+      expect(newTask.name).toEqual('Buy groceries');
+      expect(newTask.listId).toEqual(3);
+      expect(newTask.status).toEqual(TaskStatus.Todo);
+    });
+  });
 });
