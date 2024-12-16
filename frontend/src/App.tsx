@@ -7,6 +7,7 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState<string>("");
   const [activeListId, setActiveListId] = useState<number>(1);
+  const [sortNewestFirst, setSortNewestFirst] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTasksByListId = async () => {
@@ -35,6 +36,20 @@ function App() {
     setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
   };
 
+  const sortTasksByCreatedAt = () => {
+    const sortedTasks = tasks.sort((a, b) => {
+      if (new Date(a.createdAt) > new Date(b.createdAt)) {
+        return sortNewestFirst ? -1 : 1;
+      }
+      if (new Date(a.createdAt) < new Date(b.createdAt)) {
+        return sortNewestFirst ? 1 : -1;
+      }
+      return 0;
+    });
+    setTasks(sortedTasks);
+    setSortNewestFirst(!sortNewestFirst);
+  };
+
   return (
     <div>
       <h2>ToDo App</h2>
@@ -56,6 +71,13 @@ function App() {
         />
         <button onClick={() => addTask(newTaskName, activeListId)}>Add</button>
       </div>
+      <div className="sortTasks">
+        <button onClick={() => sortTasksByCreatedAt()}>
+          {`SORT. Now sorted by ${
+            sortNewestFirst ? "newest first" : "oldest first"
+          }`}
+        </button>
+      </div>
       <h3>Tasks</h3>
       <table className="taskItems">
         <tbody>
@@ -64,6 +86,7 @@ function App() {
             .map((task) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
+                <td>{new Date(task.createdAt).toLocaleString()}</td>
                 <td>
                   <button onClick={() => markAsDone(task.id)}>
                     Mark as done
@@ -81,6 +104,7 @@ function App() {
             .map((task) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
+                <td>{new Date(task.createdAt).toLocaleString()}</td>
                 <td>
                   <button onClick={() => markAsUndone(task.id)}>
                     Mark as undone
