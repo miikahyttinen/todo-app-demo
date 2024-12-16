@@ -60,6 +60,7 @@ export class TaskService {
   }
 
   getTask(taskId: number): Task {
+    // IRL this would be a database query
     const task = this.tasks.find((task) => task.id === taskId);
 
     if (!task) {
@@ -72,7 +73,7 @@ export class TaskService {
   updateTask(taskId: number, updateTaskDto: UpdateTaskDto): Task {
     const task = this.tasks.find((task) => task.id === taskId);
     if (!task) {
-      throw new Error('Task not found');
+      throw new Error(`Task to be updated not found with id ${taskId}`);
     }
     const updatedTask = { ...task, status: updateTaskDto.status };
 
