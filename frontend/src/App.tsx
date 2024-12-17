@@ -39,10 +39,10 @@ function App() {
   const sortTasksByCreatedAt = () => {
     const sortedTasks = tasks.sort((a, b) => {
       if (new Date(a.createdAt) > new Date(b.createdAt)) {
-        return sortNewestFirst ? -1 : 1;
+        return sortNewestFirst ? 1 : -1;
       }
       if (new Date(a.createdAt) < new Date(b.createdAt)) {
-        return sortNewestFirst ? 1 : -1;
+        return sortNewestFirst ? -1 : 1;
       }
       return 0;
     });
